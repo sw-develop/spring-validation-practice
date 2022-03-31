@@ -1,34 +1,56 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
 
   <title>회원가입</title>
 </head>
 <body>
-<h1>회원 가입</h1>
-<hr>
+  <h1>회원 가입</h1>
+  <hr>
 
-<form class="needs-validation form-horizontal" novalidate id="userSignUpForm" name="userSignUpForm" th:object="${userSignUpReqDto}" th:action="@{/user/sign-up}" method="POST" >
-  <div>
-<!--    <input type="text" name="email" th:value="${userDto.email}" placeholder="이메일을 입력해주세요.">-->
-<!--    <span th:text="${valid_email}"></span>-->
-    <span>test1</span>
-  </div>
+  <form action="#" novalidate id="userSignUpForm" name="userSignUpForm" th:object="${userSignUpReqDto}" th:action="@{/user/sign-up}" method="POST">
+    <table>
 
-  <div>
-<!--    <input type="text" name="nickname" th:value="${userDto.nickname}" placeholder="닉네임을 입력해주세요.">-->
-<!--    <span th:text="${valid_nickname}"></span>-->
-    <span>test2</span>
-  </div>
+      <tr>
+        <td>닉네임:</td>
+        <td><input type="text" id="userSignUpnickName" name="nickName" th:field="*{nickName}" required /></td>
+        <td th:if="${#fields.hasErrors('nickName')}" th:errors="*{nickName}">닉네임</td>
+      </tr>
 
-  <div>
-<!--    <input type="password" name="password" placeholder="비밀번호">-->
-<!--    <span th:text="${valid_password}"></span>-->
-    <span>test3</span>
-  </div>
+      <tr>
+        <td>전화번호:</td>
+        <td><input type="text" id="userSignUpPhoneNumber" name="phoneNumber" th:field="*{phoneNumber}" /></td>
+        <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">전화번호</td>
+      </tr>
 
-  <button>등록</button>
-</form>
+      <tr>
+        <td>이메일:</td>
+        <td><input type="text" id="userSignUpEmail" name="email" th:field="*{email}" /></td>
+        <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">이메일</td>
+      </tr>
+
+      <tr>
+        <td>비밀번호:</td>
+        <td><input type="text" id="userSignUpPassword" name="password" th:field="*{password}" /></td>
+        <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">비밀번호</td>
+      </tr>
+
+      <tr>
+        <td><button type="submit">Submit</button></td>
+      </tr>
+
+    </table>
+  </form>
 </body>
 </html>
+
+<script th:inline="javascript">
+
+  function signUp() {
+    console.log("회원가입 버튼 클릭!");
+
+    document.getElementById('userSignUpForm').submit();
+  }
+
+</script>
