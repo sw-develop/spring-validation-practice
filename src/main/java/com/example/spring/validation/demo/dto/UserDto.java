@@ -36,4 +36,19 @@ public class UserDto {
             this.password = password;
         }
     }
+
+    @Getter
+    public static class UserSignUpResDto {
+
+        private String nickName;
+        private String phoneNumber;
+        private String email;
+
+        @Builder
+        public UserSignUpResDto(String nickName, String phoneNumber, String email) {
+            this.nickName = nickName;
+            this.phoneNumber = phoneNumber;
+            this.email = email;
+        }
+    }
 }

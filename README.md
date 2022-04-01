@@ -1,56 +1,34 @@
 ### 목적
-Thymeleaf와 Spring Boot를 사용해 화면과 서버에서의 Validation 검사 처리 방식에 대해 이해한다.
+Thymeleaf와 Spring Boot를 사용해 화면과 서버에서의 Validation 검사 처리 방식에 대해 이해한다.   
 Spring Boot의 REST API를 사용해 서버에서의 Validation 검사 처리 방식에 대해 이해한다.
 
-Controller에서 유효성 검사를 처리하도록 한다. (Service로 넘기지 않음)
+Controller에서 입력값 및 Request Body에 대한 유효성 검사를 수행하도록 한다. (Service로 넘기지 않음)
 
 ### 1) Thymeleaf + Spring Boot에서의 Validation 검사
 플로우: 화면에서 검사(input 유효성 검사) -> 서버에서 검사(단순 검사, 구체적 검사)
 
-화면에서 검사 - bootstrap의 html5 validation을 사용하는 것
-
-단순 검사 - DTO에서의 @NotEmpty, @NotNull 같은 것
-
-구체적 검사 - ConstraintValidator 인터페이스 구현하는 것 (Custom Validation)
+화면에서 검사 - bootstrap의 html5 validation을 사용하는 것   
+단순 검사 - @NotEmpty, @NotNull 등의 기존 구현된 어노테이션 사용   
+구체적 검사 - ConstraintValidator 인터페이스를 사용해 Custom Validation 구현
 
 ### 2) Spring Boot REST API에서의 Validation 검사
-플로우: 서버에서 검사(단순 검사, 구체적 검사) --> 1)과 동일함
+플로우: 서버에서 검사(단순 검사, 구체적 검사) → 1)과 동일함
 
-차이점 - 서버사이드 렌더링 방식이 아닌 Response Body로 반환함, Validation을 통해 반환되는 오류 메시지가 통일됨
+추가 확인할 점
+- 서버사이드 렌더링 방식이 아닌 Response Body로 반환함
+- Validation을 통해 반환되는 오류 메시지가 통일됨
 
 
-*추가해볼 것   
+### *추가해볼 것   
 
+[중요도: 중] 로그인/회원가입 기능 넣어볼까..?   
 [중요도: 상] 비밀번호 DB에 저장시 암호화된 형태로 저장하기(AttributeConverter 인터페이스 사용)   
 [중요도: 중] Slf4j를 사용한 Logback으로 로그 남기기 연습   
 
 ---
 
 ### A. Thymeleaf + Spring Boot에서의 Validation 검사
-- 'spring-boot-starter-validation' 의존성을 추가해 Validation 관련 기능을 사용할 수 있다.
 
 ### A-1) 단순 검사 - DTO에서의 @NotEmpty, @NotNull 등의 어노테이션 사용
-*form
-```HTML
-<form id="userSignUpForm" name="userSignUpForm" action="#" th:action="@{/user/sign-up}" th:object="${userSignUpReqDto}" method="POST">
-```
-- th:action: form 태그 사용 시 해당 경로로 요청을 보낼 때 사용한다.
-- th:object: form submit을 할 때, form의 데이터가 th:object에 설정해준 객체로 받아진다.
-
-```HTMl
-<tr>
-    <td>닉네임:</td>
-    <td><input type="text" th:field="*{nickName}" /></td>
-    <td th:if="${#fields.hasErrors('nickName')}" th:errors="*{nickName}">닉네임</td>
-</tr>
-```
-- th:field: 필드들을 매핑해주는 역할을 한다. th:object에 설정한 객체의 내부 필드와 매칭해준다.
-- th:errors: 해당 필드의 error가 있는 경우 error message를 출력한다.
-
-참고)   
-https://velog.io/@max9106/Thymeleaf-%EC%9E%90%EC%A3%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EB%AC%B8%EB%B2%95
 
 ### A-2) 구체적 검사 - ConstraintValidator 인터페이스 구현하는 것 (Custom Validation)
-*예시 - 비밀번호 형식 확인
-
-참고) https://cheese10yun.github.io/ConstraintValidator/, https://tecoble.techcourse.co.kr/post/2021-06-21-custom-annotation/
