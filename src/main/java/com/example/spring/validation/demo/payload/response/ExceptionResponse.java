@@ -1,4 +1,4 @@
-package com.example.spring.validation.demo.api.exception;
+package com.example.spring.validation.demo.payload.response;
 
 import lombok.Builder;
 import lombok.Getter;

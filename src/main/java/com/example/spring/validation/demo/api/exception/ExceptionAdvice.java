@@ -1,5 +1,6 @@
 package com.example.spring.validation.demo.api.exception;
 
+import com.example.spring.validation.demo.payload.response.ExceptionResponse;
 import com.example.spring.validation.demo.payload.response.SingleResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
