@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,5 +71,30 @@ public class UserApiControllerTest {
                 .andExpect(jsonPath("data").exists())
                 .andExpect(jsonPath("data.[0].field").value("nickName"))
                 .andExpect(jsonPath("data.[0].defaultMessage").value("닉네임은 필수입니다."));
+    }
+
+    @DisplayName("rejectValue()로 에러 추가 정상")
+    @Test
+    void addErrorWithRejectValue() throws Exception {
+        //given
+        UserDto.UserSignUpReqDto userSignUpReqDto = UserDto.UserSignUpReqDto.builder()
+                .nickName("Tiger")
+                .phoneNumber("01012341234")
+                .email("tiger@gmail.com")
+                .password("ttttt").build();
+
+        String requestBody = objectMapper.writeValueAsString(userSignUpReqDto);
+
+        //when, then
+        mockMvc.perform(
+                post("/v2/user/sign-up")
+                    .content(requestBody)
+                    .contentType(MediaType.APPLICATION_JSON)
+        )
+//                .andDo(print());
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("data").exists())
+                .andExpect(jsonPath("data.[0].field").value("email"))
+                .andExpect(jsonPath("data.[0].defaultMessage").value("이미 등록된 이메일입니다."));
     }
 }
