@@ -1,20 +1,16 @@
 package com.example.spring.validation.demo.api.exception;
 
-import com.example.spring.validation.demo.payload.response.ExceptionResponse;
 import com.example.spring.validation.demo.payload.response.SingleResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
@@ -34,20 +30,9 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(ApiParamNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected SingleResult<List<ExceptionResponse.ApiParamNotValidExceptionRes>> apiParamNotValid(HttpServletRequest httpServletRequest, ApiParamNotValidException e) {
+    protected SingleResult<Errors> apiParamNotValid(HttpServletRequest httpServletRequest, ApiParamNotValidException e) {
 
-        Errors errors = e.getErrors();
-
-        List<ExceptionResponse.ApiParamNotValidExceptionRes> apiParamNotValidExceptionRes = new ArrayList<>();
-        for(FieldError fieldError : errors.getFieldErrors()) {
-            ExceptionResponse.ApiParamNotValidExceptionRes paramNotValidErrorRes = ExceptionResponse.ApiParamNotValidExceptionRes.builder()
-                    .field(fieldError.getField())
-                    .defaultMessage(fieldError.getDefaultMessage()).build();
-
-            apiParamNotValidExceptionRes.add(paramNotValidErrorRes);
-        }
-
-        return new SingleResult<>(apiParamNotValidExceptionRes);
+        return new SingleResult<>(e.getErrors());
     }
 }
 
