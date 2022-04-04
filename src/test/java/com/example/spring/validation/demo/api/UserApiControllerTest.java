@@ -97,4 +97,28 @@ public class UserApiControllerTest {
                 .andExpect(jsonPath("data.[0].field").value("email"))
                 .andExpect(jsonPath("data.[0].defaultMessage").value("이미 등록된 이메일입니다."));
     }
+
+    @DisplayName("MethodArgumentNotValidException 예외처리 테스트 정상")
+    @Test
+    void userSignUpWithMethodArgumentNotValidExceptionNormal() throws Exception {
+        //given
+        UserDto.UserSignUpReqDto userSignUpReqDto = UserDto.UserSignUpReqDto.builder()
+                .phoneNumber("01012341234")
+                .email("tiger@gmail.com")
+                .password("ttttt").build();
+
+        String requestBody = objectMapper.writeValueAsString(userSignUpReqDto);
+
+        //when, then
+        mockMvc.perform(
+                post("/v3/user/sign-up")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+//                .andDo(print());
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("data").exists())
+                .andExpect(jsonPath("data.[0].field").value("nickName"))
+                .andExpect(jsonPath("data.[0].defaultMessage").value("닉네임은 필수입니다."));
+    }
 }

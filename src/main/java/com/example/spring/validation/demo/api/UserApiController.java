@@ -57,4 +57,19 @@ public class UserApiController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    //POST 회원가입 - MethodArgumentNotValidException 예외처리 테스트
+    @PostMapping("v3/user/sign-up")
+    public ResponseEntity<SingleResult<UserDto.UserSignUpResDto>> v3UserSignUpWithMethodArgumentNotValidException(
+            @RequestBody @Valid UserDto.UserSignUpReqDto userSignUpReqDto) {
+
+        UserDto.UserSignUpResDto userSignUpResDto = UserDto.UserSignUpResDto.builder()
+                .nickName(userSignUpReqDto.getNickName())
+                .phoneNumber(userSignUpReqDto.getPhoneNumber())
+                .email(userSignUpReqDto.getEmail()).build();
+
+        SingleResult<UserDto.UserSignUpResDto> result = new SingleResult<>(userSignUpResDto);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }
